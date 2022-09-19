@@ -1,6 +1,12 @@
+using Microsoft.EntityFrameworkCore;
+using Store_ASPnet_MVC.Data;
+using Store_ASPnet_MVC.Data.Servicse;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<AppDBContext>(options =>options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<IActorService, ActorsService>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -19,6 +25,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+AppDBInitilizer.Seed(app);
 
 app.MapControllerRoute(
     name: "default",
